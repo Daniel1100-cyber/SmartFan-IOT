@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+data/
+logs/
+build/
+node_modules/
+reference_materials/
+docs/qa_*/
+*.log
