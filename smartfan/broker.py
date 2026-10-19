@@ -7,10 +7,10 @@ from .config import PORT
 async def run():
     broker = Broker(
         {
-            'listeners': {'default': {'type': 'tcp', 'bind': f'127.0.0.1:{PORT}'}},
-            'plugins': {
-                'amqtt.plugins.authentication.AnonymousAuthPlugin': {
-                    'allow_anonymous': True
+            "listeners": {"default": {"type": "tcp", "bind": f"127.0.0.1:{PORT}"}},
+            "plugins": {
+                "amqtt.plugins.authentication.AnonymousAuthPlugin": {
+                    "allow_anonymous": True
                 }
             },
         }
@@ -22,7 +22,7 @@ async def run():
         await broker.shutdown()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
     try:
         asyncio.run(run())

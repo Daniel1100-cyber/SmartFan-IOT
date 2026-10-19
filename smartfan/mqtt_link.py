@@ -13,7 +13,7 @@ class Link:
         self.subscriptions = subscriptions
         self.client = mqtt.Client(
             mqtt.CallbackAPIVersion.VERSION2,
-            client_id=f'smartfan-{role}-{uuid.uuid4().hex[:8]}',
+            client_id=f"smartfan-{role}-{uuid.uuid4().hex[:8]}",
             clean_session=True,
         )
         self.client.on_connect = self._connect
@@ -26,23 +26,23 @@ class Link:
         if self.connected:
             for name in self.subscriptions:
                 client.subscribe(topic(name), qos=1)
-        self.inbox.put(('_connection', self.connected))
+        self.inbox.put(("_connection", self.connected))
 
     def _disconnect(self, client, userdata, flags, reason, properties):
         self.connected = False
-        self.inbox.put(('_connection', False))
+        self.inbox.put(("_connection", False))
 
     def _message(self, client, userdata, msg):
         if msg.retain:
             return
-        name = msg.topic[len(topic('')) :]
+        name = msg.topic[len(topic("")) :]
         try:
             value = json.loads(msg.payload)
             if not isinstance(value, dict):
-                raise ValueError('Expected an object')
+                raise ValueError("Expected an object")
             self.inbox.put((name, value))
         except (ValueError, UnicodeError):
-            self.inbox.put(('_invalid', {'topic': name}))
+            self.inbox.put(("_invalid", {"topic": name}))
 
     def start(self):
         self.client.connect_async(HOST, PORT, keepalive=10)
@@ -70,4 +70,4 @@ class Link:
 
 
 def message(**fields):
-    return {'id': uuid.uuid4().hex, 'ts': time.time(), **fields}
+    return {"id": uuid.uuid4().hex, "ts": time.time(), **fields}

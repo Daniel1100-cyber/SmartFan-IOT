@@ -6,7 +6,7 @@ class Store:
         path.parent.mkdir(parents=True, exist_ok=True)
         self.db = sqlite3.connect(path)
         self.db.row_factory = sqlite3.Row
-        self.db.execute('PRAGMA journal_mode=WAL')
+        self.db.execute("PRAGMA journal_mode=WAL")
         self.db.executescript("""
         CREATE TABLE IF NOT EXISTS measurements (
           id TEXT PRIMARY KEY, ts REAL NOT NULL, received_at REAL NOT NULL,
@@ -20,62 +20,62 @@ class Store:
         CREATE INDEX IF NOT EXISTS measurement_time ON measurements(received_at);
         """)
 
-    def sample(self, reading, now):
+    def save_measurement(self, reading, received_at):
         cursor = self.db.execute(
-            'INSERT OR IGNORE INTO measurements VALUES (?,?,?,?,?,?)',
+            "INSERT OR IGNORE INTO measurements VALUES (?,?,?,?,?,?)",
             (
-                reading['id'],
-                reading['ts'],
-                now,
-                reading['device'],
-                reading['temperature'],
-                reading['humidity'],
+                reading["id"],
+                reading["ts"],
+                received_at,
+                reading["device"],
+                reading["temperature"],
+                reading["humidity"],
             ),
         )
         self.db.commit()
         return cursor.rowcount > 0
 
-    def event(self, event):
+    def save_event(self, event):
         self.db.execute(
-            'INSERT INTO events(ts,level,kind,text) VALUES (?,?,?,?)',
-            (event['ts'], event['level'], event['kind'], event['text']),
+            "INSERT INTO events(ts,level,kind,text) VALUES (?,?,?,?)",
+            (event["ts"], event["level"], event["kind"], event["text"]),
         )
         self.db.commit()
 
-    def command(self, command):
+    def save_command(self, command):
         self.db.execute(
-            'INSERT INTO commands VALUES (?,?,?,?,?,NULL)',
+            "INSERT INTO commands VALUES (?,?,?,?,?,NULL)",
             (
-                command['id'],
-                command['ts'],
-                int(command['state']),
-                command['source'],
-                'pending',
+                command["id"],
+                command["ts"],
+                int(command["state"]),
+                command["source"],
+                "pending",
             ),
         )
         self.db.commit()
 
-    def complete(self, command_id, status, now):
+    def complete_command(self, command_id, status, completed_at):
         self.db.execute(
-            'UPDATE commands SET status=?,completed_at=? WHERE id=?',
-            (status, now, command_id),
+            "UPDATE commands SET status=?,completed_at=? WHERE id=?",
+            (status, completed_at, command_id),
         )
         self.db.commit()
 
-    def history(self):
+    def recent_history(self):
         readings = [
             dict(row)
             for row in self.db.execute(
-                'SELECT * FROM measurements ORDER BY received_at DESC LIMIT 120'
+                "SELECT * FROM measurements ORDER BY received_at DESC LIMIT 120"
             )
         ][::-1]
         events = [
             dict(row)
-            for row in self.db.execute('SELECT * FROM events ORDER BY id DESC LIMIT 80')
+            for row in self.db.execute("SELECT * FROM events ORDER BY id DESC LIMIT 80")
         ]
         counts = {
-            table: self.db.execute(f'SELECT count(*) FROM {table}').fetchone()[0]
-            for table in ('measurements', 'events', 'commands')
+            table: self.db.execute(f"SELECT count(*) FROM {table}").fetchone()[0]
+            for table in ("measurements", "events", "commands")
         }
         return dict(readings=readings, events=events, counts=counts)
 
