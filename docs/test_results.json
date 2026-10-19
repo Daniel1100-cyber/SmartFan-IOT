@@ -1,0 +1,81 @@
+{
+  "integration": [
+    {
+      "test": "Initial normal data saved",
+      "status": "PASS"
+    },
+    {
+      "test": "Temperature trigger and relay acknowledgement",
+      "status": "PASS"
+    },
+    {
+      "test": "Hysteresis holds ON at 27 C",
+      "status": "PASS"
+    },
+    {
+      "test": "Cooling turns fan OFF",
+      "status": "PASS"
+    },
+    {
+      "test": "Humidity alone triggers fan",
+      "status": "PASS"
+    },
+    {
+      "test": "High humidity raises Alarm",
+      "status": "PASS"
+    },
+    {
+      "test": "Manual mode accepted",
+      "status": "PASS"
+    },
+    {
+      "test": "Button OFF while Alarm remains",
+      "status": "PASS"
+    },
+    {
+      "test": "Return to AUTO uses fresh reading",
+      "status": "PASS"
+    },
+    {
+      "test": "Both low conditions turn OFF",
+      "status": "PASS"
+    },
+    {
+      "test": "Malformed JSON rejected without crash",
+      "status": "PASS"
+    },
+    {
+      "test": "Sensor stale warning after 10 seconds",
+      "status": "PASS"
+    },
+    {
+      "test": "Sensor recovers",
+      "status": "PASS"
+    },
+    {
+      "test": "Relay acknowledgement timeout",
+      "status": "PASS"
+    },
+    {
+      "test": "Relay recovery reconciles desired state",
+      "status": "PASS"
+    },
+    {
+      "test": "Manager restart retains history without live sensor state",
+      "status": "PASS"
+    },
+    {
+      "test": "Manager restart resumes from fresh telemetry",
+      "status": "PASS"
+    },
+    {
+      "test": "Broker loss suspends control",
+      "status": "PASS"
+    },
+    {
+      "test": "Broker restart reconnects and resubscribes",
+      "status": "PASS"
+    }
+  ],
+  "database": "C:\\Users\\Daniel\\Desktop\\IOT\\build\\integration-e19b8ff0\\test.sqlite3"
+}
